@@ -1,0 +1,6 @@
+{
+  "extends": "next/core-veb-vitals",
+  "rules" : {
+    "@next/next/no-img-element" : "off"
+  }
+}
