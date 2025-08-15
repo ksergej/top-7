@@ -34,12 +34,25 @@ model Product {
   imageUrl String
   active   Boolean @default(false)
 
-  pizzas Pizza[]
+  pizzas      Pizza[]
+  ingredients Ingredient[]
 
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  Category   Category? @relation(fields: [categoryId], references: [id])
-  categoryId Int?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  Category      Category?    @relation(fields: [categoryId], references: [id])
+  categoryId    Int?
+  ProductItem   ProductItem? @relation(fields: [productItemId], references: [id])
+  productItemId Int?
+}
+
+model ProductItem {
+  id        Int       @id @default(autoincrement())
+  price     Int
+  products  Product[]
+  productId Int
+  pizzaType Int?
+  size      Int?
+  updatedAt DateTime  @updatedAt
 }
 
 model Category {
@@ -78,6 +91,7 @@ model Ingredient {
   imageUrl String
 
   pizzas    Pizza[]
+  products  Product[]
   cartItems CartItem[]
 
   createdAt DateTime @default(now())
