@@ -75,8 +75,6 @@ model Pizza {
   proteins Int
   weight   Int
 
-  ingredients Ingredient[]
-
   productId Int
   product   Product @relation(fields: [productId], references: [id])
 
@@ -91,7 +89,6 @@ model Ingredient {
   price    Int
   imageUrl String
 
-  pizzas    Pizza[]
   products  Product[]
   cartItems CartItem[]
 
