@@ -9,6 +9,7 @@ import {RangeSlider} from "@/components/ui/range-slider";
 import {CheckboxFiltersGroup} from "@/components/shared/checkbox-filters-group";
 import {useFilterIngredients} from "@/hooks/useFilterIngredients";
 import {useSet} from "react-use";
+import qs from 'qs';
 
 interface Props {
   className?: string;
@@ -28,7 +29,7 @@ export const Filters: React.FC<Props> = ({className}) => {
   const [sizes, {toggle: toggleSizes}] = useSet(new Set<string>([]));
   const [pizzaTypes, {toggle: togglePizzaTypes}] = useSet(new Set<string>([]));
 
-  const [prices, setPrice ] = React.useState<PriceProps>({priceFrom: 0, priceTo: 1000});
+  const [prices, setPrice] = React.useState<PriceProps>({priceFrom: 0, priceTo: 1000});
   const updatePrice = (name: keyof PriceProps, value: number) => {
     setPrice({
       ...prices,
@@ -37,14 +38,23 @@ export const Filters: React.FC<Props> = ({className}) => {
   };
 
   React.useEffect(() => {
-    console.log({prices, pizzaTypes, sizes, selectedIngredients});
+
+    // Filters go to Backend ... Video: 6.38.30
+    const filters = {
+      ...prices,
+      pizzaTypes: Array.from(pizzaTypes),
+      sizes: Array.from(sizes),
+      ingredients: Array.from(selectedIngredients),
+    }
+    // Video 6.41.19 -> arrayFormat: 'comma'
+    console.log(qs.stringify(filters, {arrayFormat: 'comma'}));
   }, [prices, pizzaTypes, sizes, selectedIngredients]);
 
   return (
     <div className={className}>
       <Title text="Фильтрация" size="sm" className="mb-5 font-bold"/>
 
-      {/* Верхние чекбоксы */ }
+      {/* Верхние чекбоксы */}
       <CheckboxFiltersGroup
         title="Размеры"
         name='sizes'
