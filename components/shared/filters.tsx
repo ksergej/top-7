@@ -21,7 +21,7 @@ interface PriceProps {
 }
 
 export const Filters: React.FC<Props> = ({className}) => {
-  const {ingredients, loading, onAddId, selectedIds} = useFilterIngredients();
+  const {ingredients, loading, onAddId, selectedIngredients} = useFilterIngredients();
   const items = ingredients.map((item) => ({value: String(item.id), text: item.name}));
 
   // Video: 6.30.50
@@ -35,6 +35,10 @@ export const Filters: React.FC<Props> = ({className}) => {
       [name]: value,
     });
   };
+
+  React.useEffect(() => {
+    console.log({prices, pizzaTypes, sizes, selectedIngredients});
+  }, [prices, pizzaTypes, sizes, selectedIngredients]);
 
   return (
     <div className={className}>
@@ -97,7 +101,7 @@ export const Filters: React.FC<Props> = ({className}) => {
         items={items}
         loading={loading}
         onClickCheckbox={onAddId}
-        selected={selectedIds}
+        selected={selectedIngredients}
       />
     </div>
   );
