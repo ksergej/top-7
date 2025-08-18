@@ -26,13 +26,15 @@ export const Filters: React.FC<Props> = ({className}) => {
   // Video 6.42.58
   const router = useRouter();
   const {ingredients, loading, onAddId, selectedIngredients} = useFilterIngredients();
-  const items = ingredients.map((item) => ({value: String(item.id), text: item.name}));
 
   // Video: 6.30.50
   const [sizes, {toggle: toggleSizes}] = useSet(new Set<string>([]));
   const [pizzaTypes, {toggle: togglePizzaTypes}] = useSet(new Set<string>([]));
 
-  const [prices, setPrice] = React.useState<PriceProps>({priceFrom: 0, priceTo: 1000});
+  const [prices, setPrice] = React.useState<PriceProps>({});
+
+  const items = ingredients.map((item) => ({value: String(item.id), text: item.name}));
+
   const updatePrice = (name: keyof PriceProps, value: number) => {
     setPrice({
       ...prices,
@@ -53,7 +55,7 @@ export const Filters: React.FC<Props> = ({className}) => {
     // console.log(qs.stringify(filters, {arrayFormat: 'comma'}));
 
     const query = qs.stringify(filters, {arrayFormat: 'comma'});
-    router.push(`${query}`);
+    // router.push(`${query}`);
 
     console.log(query);
 
@@ -99,14 +101,14 @@ export const Filters: React.FC<Props> = ({className}) => {
                  onChange={(e) => updatePrice('priceFrom', Number(e.target.value))}
           />
           <Input type="number" min={100} max={1000}
-                 placeholder="30000"
+                 placeholder="1000"
                  value={String(prices.priceTo)}
                  onChange={(e) => updatePrice('priceTo', Number(e.target.value))}
           />
         </div>
 
         <RangeSlider min={0} max={1000} step={10}
-                     value={[prices.priceFrom, prices.priceTo]}
+                     value={[prices.priceFrom || 0 , prices.priceTo || 1000]}
                      onValueChange={([priceFrom, priceTo]) => setPrice({priceFrom, priceTo})}
         />
 
