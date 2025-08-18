@@ -11,12 +11,13 @@ interface ReturnProps {
   setSelectedIngredients: any;
 }
 
+// Video 7.01.00 ...
 export const useFilterIngredients = (values: string[] = []): ReturnProps => {
 
   const [ingredients, setIngredients] = React.useState<Ingredient[]>([]);
   const [loading, setLoading] = React.useState(true);
 
-  // Video: 6.15.21
+  // Video: 6.15.21, 7.01.00 ... set values ...
   const [selectedIds, {toggle}] = useSet(new Set<string>(values));
 
   React.useEffect(() => {
