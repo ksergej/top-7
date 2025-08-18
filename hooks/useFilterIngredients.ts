@@ -8,15 +8,16 @@ interface ReturnProps {
   loading: boolean;
   selectedIngredients: Set<string>;
   onAddId: (id: string) => void;
+  setSelectedIngredients: any;
 }
 
-export const useFilterIngredients = (): ReturnProps => {
+export const useFilterIngredients = (values: string[] = []): ReturnProps => {
 
   const [ingredients, setIngredients] = React.useState<Ingredient[]>([]);
   const [loading, setLoading] = React.useState(true);
 
   // Video: 6.15.21
-  const [selectedIds, {toggle}] = useSet(new Set<string>([]));
+  const [selectedIds, {toggle}] = useSet(new Set<string>(values));
 
   React.useEffect(() => {
       async function fetchIngredients() {
@@ -39,5 +40,10 @@ export const useFilterIngredients = (): ReturnProps => {
     }
     , [])
 
-  return { ingredients, loading , onAddId: toggle, selectedIngredients: selectedIds};
+  // Video: 6.56.27
+  const setSelectedIngredients = (ids: string[]) => {
+    ids.forEach(selectedIds.add);
+  }
+
+  return {ingredients, loading, onAddId: toggle, selectedIngredients: selectedIds, setSelectedIngredients};
 };

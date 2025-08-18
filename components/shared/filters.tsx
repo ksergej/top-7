@@ -33,14 +33,24 @@ export const Filters: React.FC<Props> = ({className}) => {
   // Video 6.50.38
   const searchParams = useSearchParams() as unknown as Map<keyof QueryFilters, string>;
 
-  // Video 6.42.58
+  // Video 6.42.58, 7.00.00
   const router = useRouter();
-  const {ingredients, loading, onAddId, selectedIngredients} = useFilterIngredients();
+  const {ingredients, loading, onAddId, selectedIngredients, setSelectedIngredients} = useFilterIngredients(
+    searchParams.get('ingredients')?.split(',')
+  );
 
   // Video: 6.30.50
-  const [sizes, {toggle: toggleSizes}] = useSet(new Set<string>([]));
-  const [pizzaTypes, {toggle: togglePizzaTypes}] = useSet(new Set<string>([]));
-
+  // Video: 6.53.20
+  const [sizes, {toggle: toggleSizes}] = useSet(new Set<string>(
+    searchParams.has('sizes')
+      ? searchParams.get('sizes')?.split(',')
+      : []
+  ));
+  const [pizzaTypes, {toggle: togglePizzaTypes}] = useSet(new Set<string>(
+    searchParams.has('pizzaTypes')
+      ? searchParams.get('pizzaTypes')?.split(',')
+      : []
+  ));
 
   const [prices, setPrice] = React.useState<PriceProps>({
     priceFrom: Number(searchParams.get('priceFrom')) || undefined,
@@ -124,7 +134,7 @@ export const Filters: React.FC<Props> = ({className}) => {
         </div>
 
         <RangeSlider min={0} max={1000} step={10}
-                     value={[prices.priceFrom || 0 , prices.priceTo || 1000]}
+                     value={[prices.priceFrom || 0, prices.priceTo || 1000]}
                      onValueChange={([priceFrom, priceTo]) => setPrice({priceFrom, priceTo})}
         />
 
