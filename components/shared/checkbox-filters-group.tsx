@@ -20,7 +20,7 @@ interface Props {
   defaultValue?: string[];
   selected?: Set<string>;
   className?: string;
-  namen?: string;
+  name?: string;
 }
 
 export const CheckboxFiltersGroup: React.FC<Props> = ({
