@@ -16,6 +16,7 @@ export default async function Home() {
   });
 
   console.log(categories);
+  console.log(categories[0].products[0].ingredients[0].name);
 
   return <>
     <Container className="mt-5">
@@ -23,7 +24,7 @@ export default async function Home() {
 
     </Container>
 
-    <TopBar/>
+    <TopBar categories={categories.filter(category => category.products.length > 0)} />
 
     <Container className="mt-10 pb-14">
 
