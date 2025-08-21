@@ -66,17 +66,6 @@ export const useFilters = () : ReturnProps => {
     }));
   };
 
-  // Filters go to Backend ... Video: 6.38.30
-  const filters = {
-    ...prices,
-    pizzaTypes: Array.from(pizzaTypes),
-    sizes: Array.from(sizes),
-    ingredients: Array.from(selectedIngredients),
-  };
-  // Video 6.41.19 -> arrayFormat: 'comma'
-  // console.log(qs.stringify(filters, {arrayFormat: 'comma'}));
-
-
   return {
     sizes,
     pizzaTypes,

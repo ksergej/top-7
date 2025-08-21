@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import qs from "qs";
 import {Filters} from "@/hooks/use-filters";
 import {useRouter} from "next/navigation";
@@ -6,6 +6,7 @@ import {useRouter} from "next/navigation";
 export const useQueryFilters = (filters: Filters) => {
 
     const router = useRouter();
+    const [saveQuery, setValue] = useState("");
 
     React.useEffect (() => {
     // Filters go to Backend ... Video: 6.38.30
@@ -22,11 +23,13 @@ export const useQueryFilters = (filters: Filters) => {
       arrayFormat: 'comma'
     });
 
+    if (query === saveQuery) return;
+
     router.push(`?${query}`, {
       scroll: false,
     });
+    setValue(query);
 
-
-  }, [filters, router]);
+  }, [filters, router, saveQuery]);
 
 }
