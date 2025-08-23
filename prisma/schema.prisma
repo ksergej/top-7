@@ -53,6 +53,7 @@ model ProductItem {
   products  Product  @relation(fields: [productId], references: [id])
   productId Int
   updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
 
   CartItem CartItem[]
 }
