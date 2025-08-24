@@ -1,5 +1,4 @@
-
-import { Logo } from "@/shared/components/logo";
+// import { Logo } from "@/components/logo";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -12,6 +11,7 @@ import {
 import { cn } from "@/shared/lib/utils";
 import Link from "next/link";
 import * as React from "react";
+
 const components: { title: string; href: string; description: string }[] = [
   {
     title: "Alert Dialog",
@@ -49,6 +49,7 @@ const components: { title: string; href: string; description: string }[] = [
       "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
   },
 ];
+
 export default function NavigationMenuWithDropdown() {
   return (
     <NavigationMenu className="z-20">
@@ -61,9 +62,8 @@ export default function NavigationMenuWithDropdown() {
                 <NavigationMenuLink asChild>
                   <Link
                     className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-4 no-underline outline-none focus:shadow-md"
-                    href="/"
+                    href="/public"
                   >
-                    <Logo className="h-8 w-8" />
                     <div className="mb-2 mt-4 text-lg font-medium">
                       Shadcn UI Blocks
                     </div>
@@ -112,6 +112,7 @@ export default function NavigationMenuWithDropdown() {
     </NavigationMenu>
   );
 }
+
 const ListItem = React.forwardRef<
   React.ElementRef<"a">,
   React.ComponentPropsWithoutRef<"a">

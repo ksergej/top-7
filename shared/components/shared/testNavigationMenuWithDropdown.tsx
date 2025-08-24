@@ -1,5 +1,4 @@
-
-import { Logo } from "@/shared/components/logo";
+// import { Logo } from "@/components/logo";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -54,16 +53,15 @@ export default function NavigationMenuWithDropdown() {
     <NavigationMenu className="z-20">
       <NavigationMenuList>
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
+          <NavigationMenuTrigger >Getting started</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
               <li className="row-span-3">
                 <NavigationMenuLink asChild>
                   <Link
                     className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-4 no-underline outline-none focus:shadow-md"
-                    href="/"
+                    href="/public"
                   >
-                    <Logo className="h-8 w-8" />
                     <div className="mb-2 mt-4 text-lg font-medium">
                       Shadcn UI Blocks
                     </div>

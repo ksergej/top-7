@@ -1,6 +1,6 @@
 import type {Metadata} from "next";
 import {Geist, Geist_Mono, Nunito} from "next/font/google";
-import {Header} from "@/components/shared";
+import {Header} from "@/shared/components/shared";
 
 export const metadata: Metadata = {
   title: "Top 7 App",
