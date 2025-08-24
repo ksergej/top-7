@@ -18,5 +18,5 @@ export default async function ProductModalPage({ params }: { params: Promise<{ i
 
   if (!product) return NotFound();
 
-  return <ChooseProductModel product={product}/>
+  return <ChooseProductModel  product={product}/>
 }
