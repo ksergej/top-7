@@ -5,5 +5,5 @@ export {SortPopup} from "./sort-popup"
 export {TopBar} from "./top-bar";
 export {Filters} from "./filters";
 export {ProducImage} from "./product-image";
-export {ChoosePizzaForm} from "./choose-pizza-form";
+export {ChooseProductForm} from "./choose-product-form";
 export * from "./modals";
