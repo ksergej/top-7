@@ -18,7 +18,7 @@ export default async function ProductPage({params: {id}}: { params: { id: string
 
         <p className="text-gray-400">should be awaited before using its properties. Learn more</p>
         <GroupVariants
-          selectedValue='2'
+          value='2'
           items={[
           {
             name: 'Маленькая',
