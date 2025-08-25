@@ -1,6 +1,6 @@
 import {prisma} from "@/prisma/prisma-client";
 import NotFound from "next/dist/client/components/builtin/not-found";
-import {ChooseProductModel } from "@/shared/components/shared";
+import {ChooseProductModal } from "@/shared/components/shared";
 
 
 export default async function ProductModalPage({ params }: { params: Promise<{ id: string }> }) {
@@ -18,5 +18,5 @@ export default async function ProductModalPage({ params }: { params: Promise<{ i
 
   if (!product) return NotFound();
 
-  return <ChooseProductModel  product={product}/>
+  return <ChooseProductModal product={product}/>
 }
