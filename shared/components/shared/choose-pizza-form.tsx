@@ -9,6 +9,7 @@ import {PizzaSize, pizzaSizes, PizzaType, pizzaTypes} from "@/shared/constants/p
 import {Ingredient, Prisma} from "@prisma/client";
 import IngredientScalarFieldEnum = Prisma.IngredientScalarFieldEnum;
 import {IngredientItem} from "@/shared/components/shared/ingredient-item";
+import {useSet} from "react-use";
 
 interface Props {
   imageUrl: string;
@@ -30,6 +31,8 @@ export const ChoosePizzaForm: React.FC<Props> = ({
 
   const [size, setSize] = React.useState<PizzaSize>(30);
   const [type, setType] = React.useState<PizzaType>(1);
+
+  const [selectedIngredients, {toggle: addIngredient}] = useSet(new Set<number>([]));
 
   const textDetaills = "30 см, традиционное тесто 30";
   const totalPrice = 350;
@@ -60,23 +63,25 @@ export const ChoosePizzaForm: React.FC<Props> = ({
           />
         </div>
 
+        <div className = "bg-gray-50 p-5 rounded-md h-[420px] overflow-auto scrollbar mt-5">
           <div className={'grid grid-cols-3 gap-3'}>
-
             {ingredients.map((ingredient, index) => (
               <IngredientItem
                 key={index}
                 name={ingredient.name}
                 price={ingredient.price}
                 imageUrl={ingredient.imageUrl}
-                onClick={onClickAdd}
+                onClick={() => addIngredient(ingredient.id)}
+                active={selectedIngredients.has(ingredient.id)}
               />
             ))}
           </div>
+        </div>
 
-          <Button
-            className="h-[55px] px-10 mt-8 text-base rouded-[18px] w-full ">
-            Добавить в корзину за {totalPrice}
-          </Button>
+        <Button
+          className="h-[55px] px-10 mt-8 text-base rouded-[18px] w-full ">
+          Добавить в корзину за {totalPrice}
+        </Button>
 
       </div>
     </div>
