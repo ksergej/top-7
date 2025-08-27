@@ -59,6 +59,17 @@ export const ChoosePizzaForm: React.FC<Props> = ({
     disabled: !availablePizzas.some( (pizza) => Number(pizza.size) === Number(item.value)),
  }));
 
+ React.useEffect(() => {
+    const isAvailableSize = availablePizzaSizes?.find( (item) => Number(item.value) === size && !item.disabled);
+   const availableSize = availablePizzaSizes?.find( (item) => !item.disabled);
+    if(!isAvailableSize && availableSize) {
+      setSize(Number(availableSize.value) as PizzaSize);
+    }
+ }, [type]);
+
+
+ console.log(items, availablePizzas, availablePizzaSizes);
+
   return (
     <div className={cn(className, 'flex flex-1')}>
 
