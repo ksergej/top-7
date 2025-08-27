@@ -9,6 +9,7 @@ import {mapPizzaType, PizzaSize, pizzaSizes, PizzaType, pizzaTypes} from "@/shar
 import {Ingredient, ProductItem} from "@prisma/client";
 import {IngredientItem} from "@/shared/components/shared/ingredient-item";
 import {useSet} from "react-use";
+import {calcTotalPizzaPrice} from "@/shared/lib";
 
 interface Props {
   imageUrl: string;
@@ -33,14 +34,29 @@ export const ChoosePizzaForm: React.FC<Props> = ({
 
   const [selectedIngredients, {toggle: addIngredient}] = useSet(new Set<number>([]));
 
-  // TODO: Нужно сделать так чтобы при выборе несуществующей пиццы сбрасывалось на первый вариант
-  const pizzaPrice = items.find((item) => item.size === size && item.pizzaType === type) ?.price || 0;
-  const totalIngredientPrice = ingredients.filter( (ingredient) => selectedIngredients.has(ingredient.id))
-    .reduce(
-      (acc, ingredient) => acc + ingredient.price, 0
-    );
-  const totalPrice = pizzaPrice + totalIngredientPrice;
-  const textDetaills = `${size} см, ${mapPizzaType[ type]} пица, ингредиенты (${selectedIngredients.size})`;
+  const totalPrice = calcTotalPizzaPrice(
+    type,
+    size,
+    items,
+    ingredients,
+    selectedIngredients,
+  )
+  const textDetaills = `${size} см, ${mapPizzaType[type]} пица, ингредиенты (${selectedIngredients.size})`;
+
+  const filteredPizzasByType = items.filter((item) => item.pizzaType === type);
+  const availablePizzaSizes = pizzaSizes.map((item) => ({
+    name: item.name,
+    value: item.value,
+    disabled: !filteredPizzasByType.some((pizza) => Number(pizza.size) === Number(item.value)),
+  }));
+
+  React.useEffect(() => {
+    const isAvailableSize = availablePizzaSizes?.find((item) => Number(item.value) === size && !item.disabled);
+    const availableSize = availablePizzaSizes?.find((item) => !item.disabled);
+    if (!isAvailableSize && availableSize) {
+      setSize(Number(availableSize.value) as PizzaSize);
+    }
+  }, [type]);
 
   const handleClickAdd = () => {
     onClickAddCard?.();
@@ -52,23 +68,7 @@ export const ChoosePizzaForm: React.FC<Props> = ({
     });
   }
 
- const availablePizzas = items.filter ( (item) => item.pizzaType === type);
- const availablePizzaSizes = pizzaSizes.map( (item) => ({
-    name: item.name,
-    value: item.value,
-    disabled: !availablePizzas.some( (pizza) => Number(pizza.size) === Number(item.value)),
- }));
-
- React.useEffect(() => {
-    const isAvailableSize = availablePizzaSizes?.find( (item) => Number(item.value) === size && !item.disabled);
-   const availableSize = availablePizzaSizes?.find( (item) => !item.disabled);
-    if(!isAvailableSize && availableSize) {
-      setSize(Number(availableSize.value) as PizzaSize);
-    }
- }, [type]);
-
-
- console.log(items, availablePizzas, availablePizzaSizes);
+  console.log(items, filteredPizzasByType, availablePizzaSizes);
 
   return (
     <div className={cn(className, 'flex flex-1')}>
@@ -96,7 +96,7 @@ export const ChoosePizzaForm: React.FC<Props> = ({
           />
         </div>
 
-        <div className = "bg-gray-50 p-5 rounded-md h-[420px] overflow-auto scrollbar mt-5">
+        <div className="bg-gray-50 p-5 rounded-md h-[420px] overflow-auto scrollbar mt-5">
           <div className={'grid grid-cols-3 gap-3'}>
             {ingredients.map((ingredient, index) => (
               <IngredientItem
@@ -112,7 +112,7 @@ export const ChoosePizzaForm: React.FC<Props> = ({
         </div>
 
         <Button onClick={handleClickAdd}
-          className="h-[55px] px-10 mt-8 text-base rouded-[18px] w-full ">
+                className="h-[55px] px-10 mt-8 text-base rouded-[18px] w-full ">
           Добавить в корзину за {totalPrice}
         </Button>
 
