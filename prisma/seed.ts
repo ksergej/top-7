@@ -160,7 +160,19 @@ async function up() {
           connect: [{id:1}, {id:2}, {id:3}, {id:4} ]
         }
       }
-  })
+  });
+
+  await prisma.cartItem.create({
+    data:
+      {
+        productItemId: 1,
+        cartId: 2,
+        quantity: 2,
+        ingredients: {
+          connect: [{id:1}, {id:2}, {id:3}, {id:4} ]
+        }
+      }
+  });
 }
 
 

@@ -20,12 +20,18 @@ import {PizzaSize, PizzaType} from "@/shared/constants/pizza";
 
 export const CartDrawer: React.FC<React.PropsWithChildren> = ({children}) => {
   const fetchCartItems = useCartStore(state => state.fetchCartItems, );
+  const updateItemQuantity = useCartStore(state => state.updateItemQuantity, );
   const totalAmount = useCartStore(state => state.totalAmount );
   const items = useCartStore(state =>  state.items );
 
   React.useEffect(() => {
     fetchCartItems();
   }, []);
+
+  const onClickCountButton=  ( id: number, quantity: number, type: 'plus' | 'minus'  ) => {
+    updateItemQuantity( id, type === 'plus' ? quantity + 1 : quantity - 1);
+  }
+
   return (
     <Sheet>
       <SheetTrigger asChild>{children}</SheetTrigger>
@@ -55,6 +61,7 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({children}) => {
                   name={item.name}
                   price={item.price}
                   quantity={item.quantity}
+                  onClickCountButton={(type) => onClickCountButton(item.id, item.quantity, type)}
                 />
               ))
             }
