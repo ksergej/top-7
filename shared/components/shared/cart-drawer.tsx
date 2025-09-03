@@ -21,6 +21,7 @@ import {PizzaSize, PizzaType} from "@/shared/constants/pizza";
 export const CartDrawer: React.FC<React.PropsWithChildren> = ({children}) => {
   const fetchCartItems = useCartStore(state => state.fetchCartItems, );
   const updateItemQuantity = useCartStore(state => state.updateItemQuantity, );
+  const removeCartItem = useCartStore(state => state.removeCartItem, );
   const totalAmount = useCartStore(state => state.totalAmount );
   const items = useCartStore(state =>  state.items );
 
@@ -62,6 +63,7 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({children}) => {
                   price={item.price}
                   quantity={item.quantity}
                   onClickCountButton={(type) => onClickCountButton(item.id, item.quantity, type)}
+                  onClickRemove={() => removeCartItem(item.id)}
                 />
               ))
             }

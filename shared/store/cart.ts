@@ -19,8 +19,8 @@ export interface CartState {
   // // !!!! TODO: Типизировать values
   // addCartItem: (values: any) => Promise<void>;
   //
-  // /* Запрос на удаление товара из корзины */
-  // removeCartItem: (id: number) => Promise<void>;
+  /* Запрос на удаление товара из корзины */
+  removeCartItem: (id: number) => Promise<void>;
 }
 
 export const useCartStore = create<CartState>((set, get) => ({
@@ -57,19 +57,19 @@ export const useCartStore = create<CartState>((set, get) => ({
   //
 
 
-  // removeCartItem: async (id: number) => {
-  //   try {
-  //     set({ loading: true, error: false });
-  //     const data = await Api.cart.removeCartItem(id);
-  //     set(getCartDetails(data));
-  //   } catch (error) {
-  //     set({ error: true });
-  //     console.error(error);
-  //   } finally {
-  //     set({ loading: false });
-  //   }
-  // },
-  //
+  removeCartItem: async (id: number) => {
+    try {
+      set({ loading: true, error: false });
+      const data = await Api.cart.removeCartItem(id);
+      set(getCartDetails(data));
+    } catch (error) {
+      set({ error: true });
+      console.error(error);
+    } finally {
+      set({ loading: false });
+    }
+  },
+
   // addCartItem: async (values: CreateCartItemValues) => {
   //   try {
   //     set({ loading: true, error: false });
