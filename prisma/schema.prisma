@@ -99,11 +99,11 @@ model Ingredient {
 model Cart {
   id Int @id @default(autoincrement())
 
-  userId Int  @unique
-  user   User @relation(fields: [userId], references: [id])
+  userId Int?  @unique
+  user   User? @relation(fields: [userId], references: [id])
 
-  token       String
-  totalAmount Int    @default(0)
+  token       String?
+  totalAmount Int     @default(0)
 
   items  CartItem[]
   orders Order[]
