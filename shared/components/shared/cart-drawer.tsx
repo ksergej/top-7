@@ -19,18 +19,18 @@ import React from "react";
 import {PizzaSize, PizzaType} from "@/shared/constants/pizza";
 
 export const CartDrawer: React.FC<React.PropsWithChildren> = ({children}) => {
-  const fetchCartItems = useCartStore(state => state.fetchCartItems, );
-  const updateItemQuantity = useCartStore(state => state.updateItemQuantity, );
-  const removeCartItem = useCartStore(state => state.removeCartItem, );
-  const totalAmount = useCartStore(state => state.totalAmount );
-  const items = useCartStore(state =>  state.items );
+  const fetchCartItems = useCartStore(state => state.fetchCartItems,);
+  const updateItemQuantity = useCartStore(state => state.updateItemQuantity,);
+  const removeCartItem = useCartStore(state => state.removeCartItem,);
+  const totalAmount = useCartStore(state => state.totalAmount);
+  const items = useCartStore(state => state.items);
 
   React.useEffect(() => {
     fetchCartItems();
   }, []);
 
-  const onClickCountButton=  ( id: number, quantity: number, type: 'plus' | 'minus'  ) => {
-    updateItemQuantity( id, type === 'plus' ? quantity + 1 : quantity - 1);
+  const onClickCountButton = (id: number, quantity: number, type: 'plus' | 'minus') => {
+    updateItemQuantity(id, type === 'plus' ? quantity + 1 : quantity - 1);
   }
 
   return (
@@ -42,14 +42,12 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({children}) => {
             В корзине <span className="font-bold">{items.length} товара</span>
           </SheetTitle>
         </SheetHeader>
-
         {/* Items */}
         <div className="mt-5 overflow-auto flex-1">
-          <div className='mb-2'>
-            {
-              items.map((item) => (
+          {
+            items.map((item) => (
+              <div key={item.id} className='mb-2'>
                 <CartDrawerItem
-                  key={item.id}
                   id={item.id}
                   imageUrl={item.imageUrl}
                   details={
@@ -65,9 +63,9 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({children}) => {
                   onClickCountButton={(type) => onClickCountButton(item.id, item.quantity, type)}
                   onClickRemove={() => removeCartItem(item.id)}
                 />
-              ))
-            }
-          </div>
+              </div>
+            ))
+          }
         </div>
 
         <SheetFooter className=" bg-white p-8">

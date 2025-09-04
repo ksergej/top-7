@@ -60,6 +60,10 @@ export async function POST(req: NextRequest) {
 
     // 1. Поиск в корзине со списком ингредиентов с полным совпадением ингредиентов
     // 2. Проверка ниже в if совпадения количества
+    if (!data.ingredients) {
+      console.log("TEST - ist keine Pizza!!! ");
+    }
+
     const findCartItem = await prisma.cartItem.findFirst({
       where: {
         cartId: userCart.id,
@@ -74,7 +78,12 @@ export async function POST(req: NextRequest) {
 
     // Если товар был найден, делаем +1
     if (findCartItem
-      && findCartItem.ingredients.length === data.ingredients?.length
+      &&
+      (
+        !data.ingredients // если не пицца, а если пицца - то должно быть
+                          // точное совпадение числа ингредиентов
+        || findCartItem.ingredients.length === data.ingredients?.length
+      )
     ) {
       await prisma.cartItem.update({
         where: {

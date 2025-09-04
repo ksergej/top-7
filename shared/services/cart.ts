@@ -1,6 +1,6 @@
 import { Cart } from '@prisma/client';
 import { axiosInstance } from './instance';
-import {CartDTO} from "@/shared/services/dto/cart.dto";
+import {CartDTO, CreateCartItemValues} from "@/shared/services/dto/cart.dto";
 
 
 export const fetchCart = async (): Promise<CartDTO> => {
@@ -20,3 +20,9 @@ export const removeCartItem = async (id: number): Promise<CartDTO> => {
 
   return data;
 };
+
+export const addCartItem = async (values: CreateCartItemValues): Promise<CartDTO> => {
+
+  return (await axiosInstance.post<CartDTO>('/cart', values)).data;
+};
+

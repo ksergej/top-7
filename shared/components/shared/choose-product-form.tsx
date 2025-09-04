@@ -7,17 +7,26 @@ import {Button} from "@/shared/components/ui";
 interface Props {
   imageUrl: string;
   name: string;
-  onClickAdd?: VoidFunction;
+  price: number;
+  onSubmit?: VoidFunction;
   className?: string;
 }
 
-const textDetaills = "30 см, традиционное тесто 30";
-const totalPrice = 350;
-
+/**
+ * Форма выбора продукта
+ *
+ * @param imageUrl
+ * @param name
+ * @param price
+ * @param onSubmit
+ * @param className
+ * @constructor
+ */
 export const ChooseProductForm: React.FC<Props> = ({
                                                      imageUrl,
                                                      name,
-                                                     onClickAdd,
+                                                     price,
+                                                     onSubmit,
                                                      className,
                                                    }) => {
   return (
@@ -34,11 +43,12 @@ export const ChooseProductForm: React.FC<Props> = ({
 
         <Title text={name} size="md" className="mt-5 font-extrabold mb-1"/>
 
-        <p className="text-gray-400 ">{textDetaills}</p>
+        <p className="text-gray-400 ">{""}</p>
 
         <Button
+          onClick={onSubmit}
           className="h-[55px] px-10 mt-8 text-base rouded-[18px] w-full ">
-          Добавить в корзину за {totalPrice}
+          Добавить в корзину за {price}
         </Button>
 
       </div>
