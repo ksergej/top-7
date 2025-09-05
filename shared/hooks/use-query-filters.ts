@@ -30,6 +30,6 @@ export const useQueryFilters = (filters: Filters) => {
     });
     setValue(query);
 
-  }, [filters, router, saveQuery]);
+  }, [filters, saveQuery]);
 
 }
