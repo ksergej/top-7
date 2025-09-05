@@ -1,5 +1,6 @@
 'use client';
 
+import toast, { Toaster } from 'react-hot-toast';
 import React from 'react';
 import {Product} from "@prisma/client";
 import {ChooseProductForm, Title} from "@/shared/components/shared";
@@ -20,19 +21,37 @@ export const ChooseProductModal: React.FC<Props> = ({product, className}) => {
   const firstItem = product.items[0];
   const isPizzaForm = Boolean(firstItem.pizzaType);
 
-  const addCartItem = useCartStore( (state) => state.addCartItem );
+  const addCartItem = useCartStore((state) => state.addCartItem);
+  const [loading, setLoading] = React.useState(false);
+
   const onAddProduct = () => {
     addCartItem({
       productItemId: firstItem.id,
     });
   };
 
-  const onAddPizza = (productItemId: number, ingredients: number[]) => {
-    addCartItem({
-      productItemId,
-      ingredients,
-    });
+  const onAddPizza = async (productItemId: number, ingredients: number[]) => {
+    try {
+      await addCartItem({
+        productItemId,
+        ingredients,
+      });
+      toast.success('Пицца добавлена в корзину');
+      //router.back();
+    } catch (error) {
+      toast.error('Не удалось добавить пиццу в корзину')
+      console.error(error);
+    }
+
   };
+
+  const onSubmit = () => {
+    if (isPizzaForm) {
+      onAddPizza(firstItem.id, []);
+    } else {
+      onAddProduct();
+    }
+  }
 
   return (
     <Dialog open={Boolean(product)} onOpenChange={() => router.back()}>
