@@ -8,6 +8,7 @@ interface Props {
   imageUrl: string;
   name: string;
   price: number;
+  loading?: boolean;
   onSubmit?: VoidFunction;
   className?: string;
 }
@@ -18,6 +19,7 @@ interface Props {
  * @param imageUrl
  * @param name
  * @param price
+ * @param loading
  * @param onSubmit
  * @param className
  * @constructor
@@ -26,6 +28,7 @@ export const ChooseProductForm: React.FC<Props> = ({
                                                      imageUrl,
                                                      name,
                                                      price,
+                                                     loading,
                                                      onSubmit,
                                                      className,
                                                    }) => {
@@ -46,7 +49,8 @@ export const ChooseProductForm: React.FC<Props> = ({
         <p className="text-gray-400 ">{""}</p>
 
         <Button
-          onClick={onSubmit}
+          loading={loading}
+          onClick={() => onSubmit?.()}
           className="h-[55px] px-10 mt-8 text-base rouded-[18px] w-full ">
           Добавить в корзину за {price}
         </Button>

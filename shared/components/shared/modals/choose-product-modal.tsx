@@ -1,6 +1,6 @@
 'use client';
 
-import toast, { Toaster } from 'react-hot-toast';
+import toast, {Toaster} from 'react-hot-toast';
 import React from 'react';
 import {Product} from "@prisma/client";
 import {ChooseProductForm, Title} from "@/shared/components/shared";
@@ -22,34 +22,22 @@ export const ChooseProductModal: React.FC<Props> = ({product, className}) => {
   const isPizzaForm = Boolean(firstItem.pizzaType);
 
   const addCartItem = useCartStore((state) => state.addCartItem);
-  const [loading, setLoading] = React.useState(false);
+  const loading = useCartStore((state) => state.loading);
 
-  const onAddProduct = () => {
-    addCartItem({
-      productItemId: firstItem.id,
-    });
-  };
-
-  const onAddPizza = async (productItemId: number, ingredients: number[]) => {
+  const onSubmit = async (productItemId: number, ingredients?: number[]) => {
     try {
+
+      const itemId = productItemId ?? firstItem.id;
       await addCartItem({
-        productItemId,
+        productItemId: itemId,
         ingredients,
       });
-      toast.success('Пицца добавлена в корзину');
-      //router.back();
+
+      toast.success('Продукт добавлен в корзину');
+      router.back();
     } catch (error) {
-      toast.error('Не удалось добавить пиццу в корзину')
+      toast.error('Не удалось добавить продукт в корзину')
       console.error(error);
-    }
-
-  };
-
-  const onSubmit = () => {
-    if (isPizzaForm) {
-      onAddPizza(firstItem.id, []);
-    } else {
-      onAddProduct();
     }
   }
 
@@ -64,14 +52,16 @@ export const ChooseProductModal: React.FC<Props> = ({product, className}) => {
             name={product.name}
             ingredients={product.ingredients}
             items={product.items}
-            onSubmit={onAddPizza}
+            onSubmit={onSubmit}
+            loading={loading}
           />
         ) : (
           <ChooseProductForm
             imageUrl={product.imageUrl}
             name={product.name}
-            onSubmit={onAddProduct}
+            onSubmit={onSubmit}
             price={firstItem.price}
+            loading={loading}
           />
         )}
       </DialogContent>
