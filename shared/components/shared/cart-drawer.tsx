@@ -3,7 +3,6 @@
 import {Button} from '@/shared/components/ui/button';
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetFooter,
   SheetHeader,
@@ -57,6 +56,7 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({children}) => {
                       )
                       : ''
                   }
+                  disabled={item.disabled}
                   name={item.name}
                   price={item.price}
                   quantity={item.quantity}
