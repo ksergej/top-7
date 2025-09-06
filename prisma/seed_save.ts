@@ -409,7 +409,7 @@ async function down() {
     'VerificationCode',
     'Category',
     'Cart',
-    'CartItem',
+    'CheckoutItem',
   ];
   await prisma.$executeRaw`TRUNCATE TABLE "User" RESTART IDENTITY CASCADE;`;
   await prisma.$executeRaw`TRUNCATE TABLE "Product" RESTART IDENTITY CASCADE;`;
