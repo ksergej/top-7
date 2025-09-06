@@ -20,17 +20,10 @@ import Image from "next/image";
 import {Title} from "@/shared/components/shared/title";
 import {clsx} from "clsx";
 import {cn} from "@/shared/lib/utils";
+import {useCart} from "@/shared/hooks";
 
 export const CartDrawer: React.FC<React.PropsWithChildren> = ({children}) => {
-  const fetchCartItems = useCartStore(state => state.fetchCartItems,);
-  const updateItemQuantity = useCartStore(state => state.updateItemQuantity,);
-  const removeCartItem = useCartStore(state => state.removeCartItem,);
-  const totalAmount = useCartStore(state => state.totalAmount);
-  const items = useCartStore(state => state.items);
-
-  React.useEffect(() => {
-    fetchCartItems();
-  }, []);
+  const {totalAmount, updateItemQuantity, items, removeCartItem} = useCart();
 
   const onClickCountButton = (id: number, quantity: number, type: 'plus' | 'minus') => {
     updateItemQuantity(id, type === 'plus' ? quantity + 1 : quantity - 1);
