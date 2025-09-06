@@ -1,9 +1,18 @@
+'use client';
 import {CheckoutItem, CheckoutItemDetails, Container, Title, WhiteBlock} from "@/shared/components/shared";
 import {Button, Input, Textarea} from "@/shared/components/ui";
 import {cn} from "@/shared/lib/utils";
 import {ArrowRight, Package, Percent, Truck} from "lucide-react";
+import {useCart} from "@/shared/hooks";
+import {getCartItemDetails} from "@/shared/lib";
+import {PizzaSize, PizzaType} from "@/shared/constants/pizza";
 
 export default function CheckoutPage() {
+  const {totalAmount, updateItemQuantity, items, removeCartItem} = useCart();
+  const onClickCountButton = (id: number, quantity: number, type: 'plus' | 'minus') => {
+    updateItemQuantity(id, type === 'plus' ? quantity + 1 : quantity - 1);
+  };
+
   return <Container className="mt-10">
     <Title text="Оформление заказа" className="font-extrabold mb-8 text-[36px]"/>
 
@@ -13,22 +22,35 @@ export default function CheckoutPage() {
 
         <WhiteBlock title="1. Корзина">
           <div className="flex flex-col gap-5">
-          <CheckoutItem
-            id={0}
-            imageUrl={"https://media.dodostatic.net/image/r:584x584/11EE7D61706D472F9A5D71EB94149304.webp"}
-            details={"Свежие томаты, Красный лук, Сочные ананасы, Итальянские травы, Свежие томаты, Красный лук, Сочные ананасы, Итальянские травы"}
-            name={"Чоризо фреш"}
-            price={255}
-            quantity={1}>
-          </CheckoutItem>
-          <CheckoutItem
-            id={0}
-            imageUrl={"https://media.dodostatic.net/image/r:584x584/11EE7D61706D472F9A5D71EB94149304.webp"}
-            details={"Свежие томаты, Красный лук, Сочные ананасы, Итальянские травы, Свежие томаты, Красный лук, Сочные ананасы, Итальянские травы"}
-            name={"Чоризо фреш"}
-            price={255}
-            quantity={1}>
-          </CheckoutItem>
+            {
+              items.map((item) => (
+                <CheckoutItem
+                  key={item.id}
+                  id={0}
+                  imageUrl={item.imageUrl}
+                  details={getCartItemDetails(
+                    item.ingredients,
+                    item.pizzaType as PizzaType,
+                    item.pizzaSize as PizzaSize,
+                  )}
+                  name={item.name}
+                  price={item.price}
+                  quantity={item.quantity}
+                  disabled={item.disabled}
+                  onClickCountButton={(type) => onClickCountButton(item.id, item.quantity, type)}
+                  onClickRemove={() => removeCartItem(item.id)}
+                >
+                </CheckoutItem>
+              ))
+            }
+            <CheckoutItem
+              id={0}
+              imageUrl={"https://media.dodostatic.net/image/r:584x584/11EE7D61706D472F9A5D71EB94149304.webp"}
+              details={"Свежие томаты, Красный лук, Сочные ананасы, Итальянские травы, Свежие томаты, Красный лук, Сочные ананасы, Итальянские травы"}
+              name={"Чоризо фреш"}
+              price={255}
+              quantity={1}>
+            </CheckoutItem>
 
           </div>
         </WhiteBlock>
@@ -56,12 +78,13 @@ export default function CheckoutPage() {
 
       </div>
 
-      {/* Правая часть */}
+      {/* Правая часть */
+      }
       <div className="w-[450px]">
         <WhiteBlock className={cn('p-6 sticky top-4')}>
           <div className="flex flex-col gap-1">
             <span className="text-xl">Итого:</span>
-            <span className="text-[34px] font-extrabold">3344 ₽</span>
+            <span className="text-[34px] font-extrabold">{totalAmount} ₽</span>
 
           </div>
 
