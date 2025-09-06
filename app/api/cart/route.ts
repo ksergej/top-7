@@ -61,6 +61,7 @@ export async function POST(req: NextRequest) {
     // 1. Поиск в корзине со списком ингредиентов с полным совпадением ингредиентов
     // 2. Проверка ниже в if совпадения количества
     if (!data.ingredients) {
+      data.ingredients = [];
       console.log("TEST - ist keine Pizza!!! ");
     }
 
@@ -68,7 +69,12 @@ export async function POST(req: NextRequest) {
       where: {
         cartId: userCart.id,
         productItemId: data.productItemId,
-        ingredients: {every: {id: {in: data.ingredients}}},
+        AND: [
+          // есть каждый из нужных
+          ...data.ingredients.map((id) => ({ingredients: {some: {id}}})),
+          // нет лишних
+          {ingredients: {none: {id: {notIn: data.ingredients}}}},
+        ],
       },
       include: {
         ingredients: true,
@@ -78,12 +84,6 @@ export async function POST(req: NextRequest) {
 
     // Если товар был найден, делаем +1
     if (findCartItem
-      &&
-      (
-        !data.ingredients // если не пицца, а если пицца - то должно быть
-                          // точное совпадение числа ингредиентов
-        || findCartItem.ingredients.length === data.ingredients?.length
-      )
     ) {
       await prisma.cartItem.update({
         where: {
@@ -99,20 +99,21 @@ export async function POST(req: NextRequest) {
       const resp = NextResponse.json(updatedUserCart);
       resp.cookies.set('cartToken', token);
       return resp;
-    }
+    } else {
 
-    // Если товар не найден:
-    await prisma.cartItem.create({
-      data: {
-        cartId: userCart.id,
-        productItemId: data.productItemId,
-        quantity: 1,
-        ingredients: {
-          connect: data.ingredients?.map((id) => ({id})),
+      // Если товар не найден:
+      await prisma.cartItem.create({
+        data: {
+          cartId: userCart.id,
+          productItemId: data.productItemId,
+          quantity: 1,
+          ingredients: {
+            connect: data.ingredients?.map((id) => ({id})),
+          },
         },
-      },
-    });
+      });
 
+    }
     const updatedUserCart = await updateCartTotalAmount(token);
     const resp = NextResponse.json(updatedUserCart);
     resp.cookies.set('cartToken', token);
