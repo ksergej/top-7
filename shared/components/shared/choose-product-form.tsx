@@ -9,7 +9,7 @@ interface Props {
   name: string;
   price: number;
   loading?: boolean;
-  onSubmit?: VoidFunction;
+  onSubmit: (itemId: number, ingredients: number[]) => void;
   className?: string;
 }
 
