@@ -1,11 +1,10 @@
 'use client';
-import {CheckoutSidebar, Container, Title, WhiteBlock} from "@/shared/components/shared";
-import {Input, Textarea} from "@/shared/components/ui";
+import {CheckoutSidebar, Container, Title } from "@/shared/components";
 import {useCart} from "@/shared/hooks";
 import {useForm, FormProvider} from "react-hook-form"
 import {zodResolver} from "@hookform/resolvers/zod";
-import {CheckoutCart, CheckoutPersonalForm, CheckoutAddressForm} from "@/shared/components/shared/checkout/";
-import {checkoutFormSchema, CheckoutFormValues} from "@/shared/components/shared/checkout/schemas/checkout-form-schema";
+import {CheckoutCart, CheckoutPersonalForm, CheckoutAddressForm} from "@/shared/components";
+import {checkoutFormSchema, CheckoutFormValues} from "@/shared/constants";
 
 export default function CheckoutPage() {
   const {totalAmount, updateItemQuantity, items, removeCartItem} = useCart();
