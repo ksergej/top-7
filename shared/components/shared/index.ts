@@ -18,6 +18,7 @@ export {CheckoutSidebar} from "./checkout-sidebar";
 export {RequiredSymbol} from "./required-symbol";
 export {ErrorText} from "./error-text";
 export {ClearButton} from "./clear-button";
+export {AdressInput} from "./address-input";
 export * from "./form";
 export * from "./modals";
 export * from "./checkout";
