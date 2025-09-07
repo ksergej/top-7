@@ -7,6 +7,7 @@ import { CartItemProps } from './cart-item-details/cart-item-details.types';
 import * as CartItemDetails from './cart-item-details';
 import { CountButtonProps } from './count-button';
 import {Ingredient} from "@prisma/client";
+import {disableWindDown} from "effect/RuntimeFlags";
 
 interface Props extends CartItemProps {
   onClickCountButton?: (type: 'plus' | 'minus') => void;
@@ -21,11 +22,16 @@ export const CheckoutItem: React.FC<Props> = ({
   quantity,
   details,
   className,
+  disabled,
   onClickCountButton,
   onClickRemove,
 }) => {
   return (
-    <div className={cn('flex items-center justify-between', className)}>
+    <div className={cn('flex items-center justify-between',
+      {
+        'opacity-50 pointer-events-none ': disabled,
+      },
+      className)}>
       <div className="flex items-center gap-5 flex-1">
         <CartItemDetails.Image src={imageUrl} />
         <CartItemDetails.Info name={name} details={details}/>
