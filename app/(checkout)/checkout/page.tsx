@@ -43,15 +43,6 @@ export default function CheckoutPage() {
                 </CheckoutItem>
               ))
             }
-            <CheckoutItem
-              id={0}
-              imageUrl={"https://media.dodostatic.net/image/r:584x584/11EE7D61706D472F9A5D71EB94149304.webp"}
-              details={"Свежие томаты, Красный лук, Сочные ананасы, Итальянские травы, Свежие томаты, Красный лук, Сочные ананасы, Итальянские травы"}
-              name={"Чоризо фреш"}
-              price={255}
-              quantity={1}>
-            </CheckoutItem>
-
           </div>
         </WhiteBlock>
 
