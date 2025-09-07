@@ -1,8 +1,7 @@
 'use client';
-import {CheckoutItem, CheckoutItemDetails, Container, Title, WhiteBlock} from "@/shared/components/shared";
-import {Button, Input, Textarea} from "@/shared/components/ui";
+import {CheckoutItem, CheckoutSidebar, Container, Title, WhiteBlock} from "@/shared/components/shared";
+import {Input, Textarea} from "@/shared/components/ui";
 import {cn} from "@/shared/lib/utils";
-import {ArrowRight, Package, Percent, Truck} from "lucide-react";
 import {useCart} from "@/shared/hooks";
 import {getCartItemDetails} from "@/shared/lib";
 import {PizzaSize, PizzaType} from "@/shared/constants/pizza";
@@ -72,41 +71,7 @@ export default function CheckoutPage() {
       {/* Правая часть */
       }
       <div className="w-[450px]">
-        <WhiteBlock className={cn('p-6 sticky top-4')}>
-          <div className="flex flex-col gap-1">
-            <span className="text-xl">Итого:</span>
-            <span className="text-[34px] font-extrabold">{totalAmount} ₽</span>
-
-          </div>
-
-          <CheckoutItemDetails title={
-            <div className={cn('flex items-center ')}>
-              <Package size={18} className={"mr-2 text-gray-300"}/>
-              Стоимость товаров:
-            </div>
-          } value={'3300 ₽'}/>
-          <CheckoutItemDetails title={
-            <div className={cn('flex items-center ')}>
-              <Percent size={18} className={"mr-2 text-gray-300"}/>
-              Налоги:
-            </div>
-          } value={'140 ₽'}/>
-          <CheckoutItemDetails title={
-            <div className={cn('flex items-center ')}>
-              <Truck size={18} className={"mr-2 text-gray-300"}/>
-              Доставка:
-            </div>
-          } value={'120 ₽'}/>
-
-          <Button
-            type="submit"
-            className="w-full h-14 rounded-2xl mt-6 text-base font-bold">
-            Перейти к оплате
-            <ArrowRight className="w-5 ml-2"/>
-          </Button>
-
-
-        </WhiteBlock>
+        <CheckoutSidebar totalAmount={totalAmount}/>
 
       </div>
 
