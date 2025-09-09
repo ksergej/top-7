@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import {WhiteBlock} from "@/shared/components/shared/white-block";
 import {cn} from "@/shared/lib/utils";
@@ -24,8 +25,9 @@ export const CheckoutSidebar: React.FC<Props> = ({totalAmount, loading, classNam
     <WhiteBlock className={cn('p-6 sticky top-4')}>
       <div className="flex flex-col gap-1">
         <span className="text-xl">Итого:</span>
-        {loading ? (<Skeleton className="h-11 w-48 "/>) :
-          <span className="h-11 text-[34px] font-extrabold">{totalPrice} ₽</span>
+        {loading
+          ? (<Skeleton className="h-11 w-48 "/>)
+          : <span className="h-11 text-[34px] font-extrabold">{totalPrice} ₽</span>
         }
 
       </div>

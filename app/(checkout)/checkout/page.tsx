@@ -6,6 +6,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {CheckoutCart, CheckoutPersonalForm, CheckoutAddressForm} from "@/shared/components";
 import {checkoutFormSchema, CheckoutFormValues} from "@/shared/constants";
 import {cn} from "@/shared/lib/utils";
+import {createOder} from "@/app/actions";
 
 export default function CheckoutPage() {
   const {totalAmount, updateItemQuantity, items, removeCartItem, loading} = useCart();
@@ -25,7 +26,9 @@ export default function CheckoutPage() {
   });
 
   const onSubmit = (data: CheckoutFormValues) => {
-    console.log(data);
+    console.log("Submitting: ", data);
+    createOder(data);
+
   }
 
   const onClickCountButton = (id: number, quantity: number, type: 'plus' | 'minus') => {

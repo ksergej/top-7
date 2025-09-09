@@ -18,10 +18,12 @@ export const CheckoutAddressForm: React.FC<Props> = ({className}) => {
         <Controller
           control={control}
           name={address}
-          render={({field, fieldState}) => <>
-            <AdressInput onChange={field.onChange}/>
-            {fieldState.error?.message && <ErrorText text={fieldState.error.message}/>}
-          </>}
+          render={({field, fieldState}) =>
+            <>
+              <AdressInput onChange={field.onChange}/>
+              {fieldState.error?.message && <ErrorText text={fieldState.error.message}/>}
+            </>
+          }
         />
 
         <FormTextarea
