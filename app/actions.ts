@@ -7,6 +7,7 @@ import {cookies} from "next/headers";
 import {sendEmail} from "@/shared/lib/send-email";
 import {PayOrderTemplate} from "@/shared/components";
 import {ReactNode} from "react";
+import {createPayPalOrder} from "@/shared/lib/create-paypal-order";
 
 export async function createOrder(data: CheckoutFormValues) {
 
@@ -69,24 +70,28 @@ export async function createOrder(data: CheckoutFormValues) {
       },
     });
 
-      await  prisma.cartItem.deleteMany({
-        where: {
-          cartId: userCart.id,
-        },
-      });
+    await prisma.cartItem.deleteMany({
+      where: {
+        cartId: userCart.id,
+      },
+    });
 
-  // TODO:  сделать создание ссылки оплаты
+    // TODO:  сделать создание ссылки оплаты
+    const orderData = await createPayPalOrder("25.00");
+    const approveLink = orderData.links?.find((l: any) => l.rel === "approve").href;
+    console.log('ORDER CREATED 003!!!', approveLink);
 
-    console.log('ORDER CREATED', order);
     await sendEmail(
       data.email,
       'Next Pizza / Оплатите заказ №' + order.id,
       PayOrderTemplate({
         orderId: order.id,
         totalAmount: order.totalAmount,
-        paymentUrl: 'https://resend.com/docs/send-with-nextjs',
+        paymentUrl: approveLink,
       }) as ReactNode
     );
+
+    return approveLink;
 
   } catch (error) {
     console.log('[CreateOrder] Server error', error);
