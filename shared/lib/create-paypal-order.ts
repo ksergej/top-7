@@ -1,4 +1,5 @@
-export async function createPayPalOrder(amount: string = "10.00") {
+
+export async function createPayPalOrder(amount: string ) {
   const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, PAYPAL_MODE, PAYPAL_CALLBACK_URL, PAYPAL_CANCEL_URL } = process.env;
 
   const base =
@@ -52,5 +53,7 @@ export async function createPayPalOrder(amount: string = "10.00") {
   }
 
   const orderData = await orderResp.json();
-  return orderData;
+  const approveLink = orderData.links?.find((l: any) => l.rel === "approve").href;
+  const approveId = orderData.id;
+  return {approveLink, approveId };
 }

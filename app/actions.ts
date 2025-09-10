@@ -77,9 +77,16 @@ export async function createOrder(data: CheckoutFormValues) {
     });
 
     // TODO:  сделать создание ссылки оплаты
-    const orderData = await createPayPalOrder("25.00");
-    const approveLink = orderData.links?.find((l: any) => l.rel === "approve").href;
-    console.log('ORDER CREATED 003!!!', approveLink);
+    const {approveLink, approveId} = await createPayPalOrder(userCart?.totalAmount.toString());
+
+    await prisma.order.update({
+      where: {
+        id: order.id,
+      },
+      data: {
+        paymentId: approveId,
+      },
+    });
 
     await sendEmail(
       data.email,
@@ -97,4 +104,71 @@ export async function createOrder(data: CheckoutFormValues) {
     console.log('[CreateOrder] Server error', error);
   }
 
+}
+
+
+//
+// Подтверждение (capture)
+//
+export async function capturePayPalOrder(orderID: string) {
+  const {PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, PAYPAL_MODE} = process.env;
+  const base =
+    PAYPAL_MODE === "live"
+      ? "https://api-m.paypal.com"
+      : "https://api-m.sandbox.paypal.com";
+
+  // 1. Access token
+  const auth = Buffer.from(`${PAYPAL_CLIENT_ID}:${PAYPAL_CLIENT_SECRET}`).toString("base64");
+  const tokenResp = await fetch(`${base}/v1/oauth2/token`, {
+    method: "POST",
+    headers: {
+      "Authorization": `Basic ${auth}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: "grant_type=client_credentials",
+    cache: "no-store",
+  });
+
+  if (!tokenResp.ok) {
+    throw new Error("Не удалось получить PayPal access token");
+  }
+
+  const {access_token} = await tokenResp.json();
+
+  // 2. Capture
+  const captureResp = await fetch(`${base}/v2/checkout/orders/${orderID}/capture`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${access_token}`,
+    },
+    cache: "no-store",
+  });
+
+  if (!captureResp.ok) {
+    const err = await captureResp.text();
+    throw new Error("Ошибка capture PayPal order: " + err);
+  }
+
+  console.log('Capture PayPal orderID : ', orderID);
+
+  const orderData = await prisma.order.findFirst({
+    where: {
+      paymentId: orderID,
+    },
+  });
+
+  if (orderData) {
+    await prisma.order.update({
+      where: {
+        id: orderData.id,
+      },
+      data: {
+        status: 'SUCCEEDED'
+      },
+    });
+  }
+
+  const captureData = await captureResp.json();
+  return captureData;
 }
