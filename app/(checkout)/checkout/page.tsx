@@ -6,10 +6,14 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {CheckoutCart, CheckoutPersonalForm, CheckoutAddressForm} from "@/shared/components";
 import {checkoutFormSchema, CheckoutFormValues} from "@/shared/constants";
 import {cn} from "@/shared/lib/utils";
-import {createOder} from "@/app/actions";
+import {createOrder} from "@/app/actions";
+import toast from "react-hot-toast";
+import React from "react";
 
 export default function CheckoutPage() {
   const {totalAmount, updateItemQuantity, items, removeCartItem, loading} = useCart();
+  const [submitting, setSubmitting] = React.useState(false);
+
 
   const form = useForm<CheckoutFormValues>({
     resolver: zodResolver(checkoutFormSchema),
@@ -25,11 +29,28 @@ export default function CheckoutPage() {
     reValidateMode: 'onChange',
   });
 
-  const onSubmit = (data: CheckoutFormValues) => {
-    console.log("Submitting: ", data);
-    createOder(data);
+  const onSubmit = async (data: CheckoutFormValues) => {
+    try {
+      setSubmitting(true);
 
-  }
+      const url = await createOrder(data);
+
+      toast.error('Заказ успешно оформлен! 📝 Переход на оплату ...', {
+        icon: '✅',
+      });
+
+      if (url) {
+        location.href = url;
+      }
+
+    } catch (error) {
+      console.log(error);
+      setSubmitting(false);
+      return toast.error('Не удалось создать заказ', {
+        icon: '❌',
+      });
+    }
+  };
 
   const onClickCountButton = (id: number, quantity: number, type: 'plus' | 'minus') => {
     updateItemQuantity(id, type === 'plus' ? quantity + 1 : quantity - 1);
@@ -56,7 +77,7 @@ export default function CheckoutPage() {
 
           {/* Правая часть */}
           <div className="w-[450px]">
-            <CheckoutSidebar totalAmount={totalAmount} loading={loading}/>
+            <CheckoutSidebar loading={loading || submitting} totalAmount={totalAmount} />
           </div>
         </div>
 
