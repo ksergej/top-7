@@ -9,9 +9,10 @@ import {SearchInput} from './search-input';
 import {cn} from '@/shared/lib/utils';
 import {CartDrawer} from './cart-drawer';
 import Link from "next/link";
-import {CartButton} from "@/shared/components/shared";
-import {useSearchParams} from 'next/navigation';
+import {CartButton, ProfileButton} from "@/shared/components/shared";
+import {redirect, useSearchParams} from 'next/navigation';
 import toast from "react-hot-toast";
+import {useSession, signIn} from "next-auth/react";
 
 
 interface Props {
@@ -26,7 +27,11 @@ export const Header: React.FC<Props> = ({
                                           className
                                         }) => {
 
+  const {data: session} = useSession();
   const searchParams = useSearchParams();
+
+  console.log(session, 999);
+
   React.useEffect(() => {
       console.log(searchParams.has('paid'), 999);
       if (searchParams.has('paid')) {
@@ -58,10 +63,7 @@ export const Header: React.FC<Props> = ({
         </div>}
 
         <div className="flex items-center gap-3">
-          <Button variant="outline" className="flex items-center gap-1">
-            <User size={16}/>
-            Anmelden</Button>
-
+          <ProfileButton/>
           {hasCart && <CartButton/>}
         </div>
       </Container>
