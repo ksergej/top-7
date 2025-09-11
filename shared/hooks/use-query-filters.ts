@@ -5,31 +5,37 @@ import {useRouter} from "next/navigation";
 
 export const useQueryFilters = (filters: Filters) => {
 
+    const isMounted = React.useRef(false);
     const router = useRouter();
-    const [saveQuery, setValue] = useState("");
+    //const [saveQuery, setValue] = useState("");
 
     React.useEffect (() => {
-    // Filters go to Backend ... Video: 6.38.30
-    const params = {
-      ...filters.prices,
-      pizzaTypes: Array.from(filters.pizzaTypes),
-      sizes: Array.from(filters.sizes),
-      ingredients: Array.from(filters.selectedIngredients),
-    };
-    // Video 6.41.19 -> arrayFormat: 'comma'
-    // console.log(qs.stringify(filters, {arrayFormat: 'comma'}));
+      if (isMounted.current) {
+        // Filters go to Backend ... Video: 6.38.30
+        const params = {
+          ...filters.prices,
+          pizzaTypes: Array.from(filters.pizzaTypes),
+          sizes: Array.from(filters.sizes),
+          ingredients: Array.from(filters.selectedIngredients),
+        };
+        // Video 6.41.19 -> arrayFormat: 'comma'
+        // console.log(qs.stringify(filters, {arrayFormat: 'comma'}));
 
-    const query = qs.stringify(params, {
-      arrayFormat: 'comma'
-    });
+        const query = qs.stringify(params, {
+          arrayFormat: 'comma'
+        });
 
-    if (query === saveQuery) return;
+        //if (query === saveQuery) return;
 
-    router.push(`?${query}`, {
-      scroll: false,
-    });
-    setValue(query);
+        router.push(`?${query}`, {
+          scroll: false,
+        });
+        //setValue(query);
 
-  }, [filters, saveQuery]);
+        console.log(filters, 999);
+      }
+    isMounted.current = true;
+//  }, [filters, saveQuery]);
+}, [filters]);
 
 }

@@ -6,8 +6,6 @@ export default async function Home( { searchParams} : { searchParams: GetSearchP
 
   const categories = await findPizzas(searchParams);
 
-  console.log(categories);
-
   return <>
     <Container className="mt-5">
       <Title text="Kategorien" size="lg" className="font-extrabold"/>

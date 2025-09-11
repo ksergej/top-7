@@ -12,7 +12,6 @@ export default async function SuccessPage({ searchParams }: { searchParams: { to
   return (
     <div>
       <h1>Оплата успешна 🎉</h1>
-      <pre>{JSON.stringify(result, null, 2)}</pre>
     </div>
   )
 }
