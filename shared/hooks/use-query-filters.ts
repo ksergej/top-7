@@ -32,7 +32,6 @@ export const useQueryFilters = (filters: Filters) => {
         });
         //setValue(query);
 
-        console.log(filters, 999);
       }
     isMounted.current = true;
 //  }, [filters, saveQuery]);

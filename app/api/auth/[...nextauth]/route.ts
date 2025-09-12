@@ -2,7 +2,8 @@ import NextAuth from 'next-auth';
 import GitHubProvider from 'next-auth/providers/github';
 import CredentialsProvider from "next-auth/providers/credentials";
 import {prisma} from "@/prisma/prisma-client";
-import {compare, hash} from "bcrypt";
+import {compare, hash, hashSync} from "bcrypt";
+import {UserRole} from "@prisma/client";
 
 
 export const authOptions = {
@@ -11,6 +12,15 @@ export const authOptions = {
     GitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID || '',
       clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
+      profile(profile) {
+        return {
+          id: profile.id,
+          name: profile.name || profile.login,
+          email: profile.email,
+          image: profile.avatar_url,
+          role: 'USER' as UserRole,
+        };
+      },
     }),
     CredentialsProvider({
       name: 'Credentials',
@@ -68,7 +78,7 @@ export const authOptions = {
 
       return token;
     },
-    session({ session, token }) {
+    session({session, token}) {
       if (session?.user) {
         session.user.id = token.id;
         session.user.role = token.role;
@@ -77,14 +87,58 @@ export const authOptions = {
       return session;
     },
 
+    async signIn({user, account}) {
+      try {
+        if (account?.provider === 'credentials') {
+          return true;
+        }
+
+        if (!user.email) {
+          return false;
+        }
+
+        const findUser = await prisma.user.findFirst({
+          where: {
+            OR: [
+              {provider: account?.provider, providerId: account?.providerAccountId},
+              {email: user.email},
+            ],
+          },
+        });
+
+        if (findUser) {
+          await prisma.user.update({
+            where: {
+              id: findUser.id,
+            },
+            data: {
+              provider: account?.provider,
+              providerId: account?.providerAccountId,
+            },
+          });
+          return true;
+        }
+
+        await prisma.user.create({
+          data: {
+            email: user.email,
+            fullName: user.name || 'User #' + user.id,
+            password: hashSync(user.id.toString(), 10),
+            verified: new Date(),
+            provider: account?.provider,
+            providerId: account?.providerAccountId,
+            phone: '1234567890',
+          },
+        });
+
+        return true;
+      } catch (error) {
+        console.log('Error [SIGNIN]', error);
+        return false;
+      }
+    },
   },
-  jwt: {
-    secret: process.env.NEXTAUTH_SECRET,
-    encryption: true,
-    signingKey: process.env.NEXTAUTH_SECRET,
-    encryptionKey: process.env.NEXTAUTH_SECRET,
-  },
-}
+};
 
 const handler = NextAuth(authOptions);
 export {handler as GET, handler as POST};
