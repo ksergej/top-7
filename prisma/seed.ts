@@ -31,16 +31,18 @@ async function up() {
       {
         fullName: 'User',
         email: 'user@test.ru',
-        password: '111111',
+        password: '$2b$10$7OkPO1nD/RVz6mVNvgVIjOGUrH5RuX7cunUMyGDRfb0.r9zyyJNOu',
         role: 'USER',
         phone: '123',
+        verified: new Date(),
       },
       {
         fullName: 'Admin',
         email: 'admin@test.ru',
-        password: '111111',
+        password: '$2b$10$7OkPO1nD/RVz6mVNvgVIjOGUrH5RuX7cunUMyGDRfb0.r9zyyJNOu',
         role: 'ADMIN',
         phone: '1234',
+        verified: new Date(),
       },
     ],
   });

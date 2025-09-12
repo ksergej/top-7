@@ -62,7 +62,6 @@ export async function POST(req: NextRequest) {
     // 2. Проверка ниже в if совпадения количества
     if (!data.ingredients) {
       data.ingredients = [];
-      console.log("TEST - ist keine Pizza!!! ");
     }
 
     const findCartItem = await prisma.cartItem.findFirst({

@@ -9,7 +9,7 @@ import {SearchInput} from './search-input';
 import {cn} from '@/shared/lib/utils';
 import {CartDrawer} from './cart-drawer';
 import Link from "next/link";
-import {CartButton, ProfileButton} from "@/shared/components/shared";
+import {AuthModal, CartButton, ProfileButton} from "@/shared/components/shared";
 import {redirect, useSearchParams} from 'next/navigation';
 import toast from "react-hot-toast";
 import {useSession, signIn} from "next-auth/react";
@@ -27,13 +27,11 @@ export const Header: React.FC<Props> = ({
                                           className
                                         }) => {
 
+  const [openAuthModal, setOpenAuthModal] = React.useState(false);
   const {data: session} = useSession();
   const searchParams = useSearchParams();
 
-  console.log(session, 999);
-
   React.useEffect(() => {
-      console.log(searchParams.has('paid'), 999);
       if (searchParams.has('paid')) {
         setTimeout(() => {
           toast.success('Заказ успешно оплачен!');
@@ -63,7 +61,9 @@ export const Header: React.FC<Props> = ({
         </div>}
 
         <div className="flex items-center gap-3">
-          <ProfileButton/>
+          <AuthModal open={openAuthModal} onClose={() => setOpenAuthModal(false)}/>
+
+          <ProfileButton onClickSighIn={() => setOpenAuthModal(true)}/>
           {hasCart && <CartButton/>}
         </div>
       </Container>
