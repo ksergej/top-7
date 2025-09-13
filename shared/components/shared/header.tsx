@@ -10,9 +10,10 @@ import {cn} from '@/shared/lib/utils';
 import {CartDrawer} from './cart-drawer';
 import Link from "next/link";
 import {AuthModal, CartButton, ProfileButton} from "@/shared/components/shared";
-import {redirect, useSearchParams} from 'next/navigation';
+import {redirect, useRouter, useSearchParams} from 'next/navigation';
 import toast from "react-hot-toast";
 import {useSession, signIn} from "next-auth/react";
+import {router} from "next/client";
 
 
 interface Props {
@@ -30,16 +31,35 @@ export const Header: React.FC<Props> = ({
   const [openAuthModal, setOpenAuthModal] = React.useState(false);
   const {data: session} = useSession();
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   React.useEffect(() => {
+      let toastMessage = '';
       if (searchParams.has('paid')) {
+        toastMessage = 'Заказ успешно оплачен!';
+      }
+
+      if (searchParams.has('verified')) {
+        toastMessage = 'Почта успешно подверждена!!';
+      }
+
+      if (toastMessage) {
         setTimeout(() => {
-          toast.success('Заказ успешно оплачен!');
-        }, 500);
+          router.replace('/');
+          toast.success(toastMessage, {duration: 3000});
+        }, 1000);
       }
     }, []
   );
 
+  React.useEffect(() => {
+      if (searchParams.has('not_paid')) {
+        setTimeout(() => {
+          toast.error('Ошибка при оплате заказа!');
+        }, 500);
+      }
+    }, []
+  );
 
   return (
     <header className={cn(' border-b border-gray-100', className)}>

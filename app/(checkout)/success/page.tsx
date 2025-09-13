@@ -1,4 +1,5 @@
 import {capturePayPalOrder} from "@/app/actions";
+import {redirect} from "next/navigation";
 
 export default async function SuccessPage({ searchParams }: { searchParams: { token?: string } }) {
   const orderID = searchParams.token // PayPal присылает orderID в ?token=...
@@ -9,9 +10,9 @@ export default async function SuccessPage({ searchParams }: { searchParams: { to
 
   const result = await capturePayPalOrder(orderID)
 
-  return (
-    <div>
-      <h1>Оплата успешна 🎉</h1>
-    </div>
-  )
+  if (result.success) {
+    return redirect('/?paid');
+  } else {
+    return redirect('/?not_paid');
+  }
 }

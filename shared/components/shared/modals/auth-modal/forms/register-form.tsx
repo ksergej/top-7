@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { TFormRegisterValues, formRegisterSchema } from './schemas';
 import toast from 'react-hot-toast';
 import { FormInput } from '@/shared/components/shared/form';
+import {registerUser} from "@/app/actions";
 //import { registerUser } from '@/app/actions';
 
 interface Props {
@@ -28,11 +29,12 @@ export const RegisterForm: React.FC<Props> = ({ onClose, onClickLogin }) => {
 
   const onSubmit = async (data: TFormRegisterValues) => {
     try {
-      // await registerUser({
-      //   email: data.email,
-      //   fullName: data.fullName,
-      //   password: data.password,
-      // });
+      await registerUser({
+        email: data.email,
+        fullName: data.fullName,
+        password: data.password,
+        phone: '12345678'
+      });
 
       toast.error('Регистрация успешна 📝. Подтвердите свою почту', {
         icon: '✅',
