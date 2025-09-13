@@ -2,12 +2,14 @@
 
 import {CheckoutFormValues} from "@/shared/constants";
 import {prisma} from "@/prisma/prisma-client";
-import {OrderStatus} from "@prisma/client";
+import {OrderStatus, Prisma} from "@prisma/client";
 import {cookies} from "next/headers";
 import {sendEmail} from "@/shared/lib/send-email";
 import {PayOrderTemplate} from "@/shared/components";
 import {ReactNode} from "react";
 import {createPayPalOrder} from "@/shared/lib/create-paypal-order";
+import {getUserSession} from "@/shared/lib/get-user-session";
+import {hashSync} from "bcrypt";
 
 export async function createOrder(data: CheckoutFormValues) {
 
@@ -172,3 +174,35 @@ export async function capturePayPalOrder(orderID: string) {
   const captureData = await captureResp.json();
   return captureData;
 }
+
+export async function updateUserInfo(body: Prisma.UserCreateInput) {
+  try {
+    const currentUser = await getUserSession();
+
+    if (!currentUser) {
+      throw new Error('Пользователь не найден');
+    }
+
+    const findUser = await prisma.user.findFirst({
+      where: {
+        id: Number(currentUser.id),
+      },
+    });
+
+
+    await prisma.user.update({
+      where: {
+        id: Number(currentUser.id),
+      },
+      data: {
+        fullName: body.fullName,
+        email: body.email,
+        password: body.password ? hashSync(body.password as string, 10) : findUser?.password,
+      },
+    });
+  } catch (error) {
+    console.log('Error [UPDATE_USER]', error);
+    throw error;
+  }
+}
+

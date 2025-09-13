@@ -15,6 +15,9 @@ interface Props {
 }
 
 export const LoginForm: React.FC<Props> = ({ onClose }) => {
+
+  const [loading, setLoading] = React.useState(false);
+
   const form = useForm<TFormLoginData>({
     resolver: zodResolver(formLoginSchema),
     defaultValues: {
@@ -24,6 +27,7 @@ export const LoginForm: React.FC<Props> = ({ onClose }) => {
   });
 
   const onSubmit = async (data: TFormLoginData) => {
+    setLoading(true);
     try {
       const resp = await signIn('credentials', {
         ...data,
@@ -63,7 +67,7 @@ export const LoginForm: React.FC<Props> = ({ onClose }) => {
         <FormInput name="email" label="E-Mail" required />
         <FormInput type="password" name="password" label="Пароль" required />
 
-        <Button disabled={form.formState.isSubmitting} className="h-12 text-base" type="submit">
+        <Button loading={loading} disabled={form.formState.isSubmitting} className="h-12 text-base" type="submit">
           Войти
         </Button>
       </form>

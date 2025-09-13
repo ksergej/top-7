@@ -11,11 +11,11 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
+  id       Int     @id @default(autoincrement())
   fullName String
   email    String
   password String
-  phone    String @unique
+  phone    String? @unique
 
   role         UserRole          @default(USER)
   orders       Order[]
@@ -150,7 +150,7 @@ model Order {
   fullName String
   address  String
   email    String
-  phone    String
+  phone    String?
   comment  String?
 
   createdAt DateTime @default(now())
