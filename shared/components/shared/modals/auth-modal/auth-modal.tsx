@@ -72,6 +72,23 @@ export const AuthModal: React.FC<Props> = ({open, onClose}) => {
             />
             Google
           </Button>
+
+          <Button
+            variant="secondary"
+            onClick={() =>
+              signIn('facebook', {
+                callbackUrl: '/',
+                redirect: true,
+              })
+            }
+            type="button"
+            className="gap-2 h-12 p-2 flex-1">
+            <img
+              className="w-6 h-6"
+              src="/facebook_logo.png"
+            />
+            Facebook
+          </Button>
         </div>
 
         <Button variant="outline" onClick={onSwitchType} type="button" className="h-12">
