@@ -8,8 +8,8 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(req: any, res: any) {
   try {
-    // const user = await getUserSession();
-    const user = await getServerSession(req, res, authOptions);
+    const user = await getUserSession();
+    // const user = await getServerSession(req, res, authOptions);
 
     if (!user) {
       return NextResponse.json({ message: '[USER_GET] Unauthorized' }, { status: 401 });
