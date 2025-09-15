@@ -5,7 +5,6 @@ import {useForm, FormProvider} from "react-hook-form"
 import {zodResolver} from "@hookform/resolvers/zod";
 import {CheckoutCart, CheckoutPersonalForm, CheckoutAddressForm} from "@/shared/components";
 import {checkoutFormSchema, CheckoutFormValues} from "@/shared/constants";
-import {cn} from "@/shared/lib/utils";
 import {createOrder} from "@/app/actions";
 import toast from "react-hot-toast";
 import React from "react";
@@ -45,7 +44,7 @@ export default function CheckoutPage() {
     if (session) {
       fetchUserInfo();
     }
-  }, [session]);
+  }, [session, form]);
 
   const onSubmit = async (data: CheckoutFormValues) => {
     try {

@@ -27,6 +27,7 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({children}) => {
   const [redirecting, setRedirecting] = React.useState(false);
 
   const onClickCountButton = (id: number, quantity: number, type: 'plus' | 'minus') => {
+    console.log(id, quantity, type);
     updateItemQuantity(id, type === 'plus' ? quantity + 1 : quantity - 1);
   }
 

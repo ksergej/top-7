@@ -5,13 +5,10 @@ import { cn } from '@/shared/lib/utils';
 import { X } from 'lucide-react';
 import { CartItemProps } from './cart-item-details/cart-item-details.types';
 import * as CartItemDetails from './cart-item-details';
-import { CountButtonProps } from './count-button';
-import {Ingredient} from "@prisma/client";
-import {disableWindDown} from "effect/RuntimeFlags";
 
 interface Props extends CartItemProps {
   onClickCountButton?: (type: 'plus' | 'minus') => void;
-  onClickRemove?: void;
+  onClickRemove?: () => void;
   className?: string;
 }
 
@@ -41,7 +38,7 @@ export const CheckoutItem: React.FC<Props> = ({
 
       <div className="flex items-center gap-5 ml-20">
         <CartItemDetails.CountButton onClick={onClickCountButton} value={quantity} />
-        <button type="button" onClick={onClickRemove}>
+        <button type="button" onClick={onClickRemove ? onClickRemove : undefined}>
           <X className="text-gray-400 cursor-pointer hover:text-gray-600" size={20} />
         </button>
       </div>

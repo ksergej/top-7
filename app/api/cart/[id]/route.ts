@@ -2,11 +2,12 @@ import {NextRequest, NextResponse} from 'next/server';
 import {prisma} from "@/prisma/prisma-client";
 import {updateCartTotalAmount} from "@/shared/lib/update-cart-total-amount";
 
-export async function PATCH(req: NextRequest, {params}: { params: { id: string } }) {
+export async function PATCH(req: NextRequest) {
   try {
 
-
-    const id = Number(params.id);
+    // Достаём id прямо из URL
+    const url = new URL(req.url);
+    const id = Number( url.pathname.split("/").pop()); // "123" если вызвали /api/cart/123
     const body = await req.json();
     const token = req.cookies.get('cartToken')?.value;
 
@@ -26,7 +27,7 @@ export async function PATCH(req: NextRequest, {params}: { params: { id: string }
 
     await prisma.cartItem.update({
       where: {
-        id,
+        id: cartItem.id,
       },
       data: {
         quantity: body.quantity,
@@ -42,7 +43,8 @@ export async function PATCH(req: NextRequest, {params}: { params: { id: string }
   }
 }
 
-export async function DELETE(req: NextRequest, {params}: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   try {
     const id = Number(params.id);
     const token = req.cookies.get('cartToken')?.value;
@@ -76,5 +78,4 @@ export async function DELETE(req: NextRequest, {params}: { params: { id: string 
     return NextResponse.json({message: ' Не удалось удалить корзину'}, {status: 500});
 
   }
-
 }

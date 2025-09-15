@@ -1,5 +1,4 @@
 import type {Metadata} from "next";
-import {Geist, Geist_Mono, Nunito} from "next/font/google";
 import {Header} from "@/shared/components/shared";
 import {Suspense} from "react";
 

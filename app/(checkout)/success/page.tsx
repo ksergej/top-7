@@ -1,7 +1,7 @@
 import {capturePayPalOrder} from "@/app/actions";
 import {redirect} from "next/navigation";
 
-export default async function SuccessPage({ searchParams }: { searchParams: { token?: string } }) {
+export default async function SuccessPage({ searchParams }: { searchParams: Promise<{ token?: string }> }) {
   const params = await searchParams;
   const orderID = params.token; // PayPal присылает orderID в ?token=...
 

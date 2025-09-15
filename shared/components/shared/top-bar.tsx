@@ -1,11 +1,9 @@
 import {cn} from '@/shared/lib/utils';
 import React from 'react';
-import {Props} from "next/script";
 import {Container} from "@/shared/components/shared/container";
 import {Categories} from "@/shared/components/shared/categories";
 import {SortPopup} from "@/shared/components/shared/sort-popup";
 import {Category} from "@prisma/client";
-import {categories} from "@/prisma/constants";
 
 interface Props {
   categories: Category[];

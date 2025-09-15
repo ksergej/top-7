@@ -1,10 +1,10 @@
 import React from 'react';
 import {cn} from "@/shared/lib/utils";
-import {PizzaImage} from "@/shared/components/shared/pizza-image";
 import {Title} from "@/shared/components/shared/title";
 import {Button} from "@/shared/components/ui";
 
 interface Props {
+  itemId: number;
   imageUrl: string;
   name: string;
   price: number;
@@ -25,6 +25,7 @@ interface Props {
  * @constructor
  */
 export const ChooseProductForm: React.FC<Props> = ({
+                                                     itemId,
                                                      imageUrl,
                                                      name,
                                                      price,
@@ -50,7 +51,7 @@ export const ChooseProductForm: React.FC<Props> = ({
 
         <Button
           loading={loading}
-          onClick={() => onSubmit?.()}
+          onClick={() => onSubmit?.( itemId, [])}
           className="h-[55px] px-10 mt-8 text-base rouded-[18px] w-full ">
           Добавить в корзину за {price}
         </Button>
